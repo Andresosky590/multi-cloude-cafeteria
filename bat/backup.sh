@@ -51,7 +51,8 @@ if [ -x "$MYSQLDUMP" ]; then
   if MYSQL_PWD="$(leer_env DB_LOCAL_PASSWORD)" "$MYSQLDUMP" \
        --protocol=TCP -h "$(leer_env DB_LOCAL_HOST)" -P "$PUERTO_LOCAL" \
        -u "$(leer_env DB_LOCAL_USER)" \
-       --single-transaction --no-tablespaces --routines --triggers --databases > "$ARCHIVO" 2>>"$LOG"; then
+       --single-transaction --no-tablespaces --routines --triggers --databases "$(leer_env DB_LOCAL_NAME)" \
+       > "$ARCHIVO" 2>>"$LOG"; then
     log "OK xampp -> $ARCHIVO ($(du -h "$ARCHIVO" | cut -f1))"
   else
     rm -f "$ARCHIVO"; log "ERROR xampp (mysqldump)"; errores=$((errores+1))
