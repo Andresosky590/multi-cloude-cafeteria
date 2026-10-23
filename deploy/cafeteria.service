@@ -1,0 +1,17 @@
+# Servicio systemd: mantiene el backend (API + frontend) encendido y lo arranca con la VM.
+# Se instala con el comando del paso 14 de la guía (reemplaza USUARIO y RUTA).
+[Unit]
+Description=Dashboard Cafeteria SENA (Node/Express)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=USUARIO
+WorkingDirectory=RUTA/backend
+ExecStart=/usr/bin/node server.js
+Restart=always
+RestartSec=5
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target

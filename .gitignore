@@ -1,0 +1,7 @@
+# Dependencias
+node_modules/
+
+# Copias de seguridad: se quedan solo en la VM
+Backup/**/*.sql
+Backup/*.log
+Backup/.backup.lock

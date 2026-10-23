@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000/api';
+const API_URL = import.meta.env.VITE_API_URL || '/api';
 const TIPOS_PQR = ['Queja', 'Sugerencia'];
 
 // Formulario genérico: recibe los campos, la URL y qué hacer al guardar

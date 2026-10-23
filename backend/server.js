@@ -2,10 +2,15 @@ const express = require('express');
 const mysql = require('mysql2/promise');
 const { Pool } = require('pg');
 const cors = require('cors');
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const app = express();
 app.use(cors());
+app.use(express.json());
+
+// Frontend compilado (frontend -> npm run build -> backend/public)
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
@@ -37,6 +42,11 @@ const poolSupabase = new Pool({
 const TIPOS_PQR = ['Queja', 'Sugerencia'];
 
 // ---------- LECTURA ----------
+
+// Salud del servicio: sirve para verificar el despliegue desde otro equipo
+app.get('/api/health', (req, res) => {
+    res.json({ success: true, servicio: 'cafeteria-sena', hora: new Date().toISOString() });
+});
 
 // ENDPOINT 1: POS Local (XAMPP)
 app.get('/api/pos-local', async (req, res) => {

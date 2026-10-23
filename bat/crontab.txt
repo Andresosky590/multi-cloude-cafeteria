@@ -1,0 +1,7 @@
+# Programación de backups (equivalente al Programador de tareas de Windows)
+# Lo instala automáticamente: bash bat/instalar-cron.sh
+#
+# minuto hora día-del-mes mes día-de-la-semana  comando
+# hora: 6 = 6:00 a.m., 11 = 11:00 a.m., 12 = 12:00 m., 20 = 8:00 p.m.
+CRON_TZ=America/Bogota
+0 6,11,12,20 * * * /bin/bash RUTA_PROYECTO/bat/backup.sh >/dev/null 2>&1
