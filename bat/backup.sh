@@ -20,7 +20,8 @@ DIAS_RETENCION="${DIAS_RETENCION:-7}"   # borra copias con más de 7 días
 FECHA="$(date +%Y-%m-%d_%H-%M)"
 # mysqldump: el de XAMPP si existe; si no, el del MySQL instalado en la VM (/usr/bin/mysqldump)
 MYSQLDUMP="/opt/lampp/bin/mysqldump"
-[ -x "$MYSQLDUMP" ] || MYSQLDUMP="$(command -v mysqldump || echo /usr/bin/mysqldump)"# Node: el del sistema o, si se instaló con nvm, el de ~/.nvm (cron no carga nvm)
+[ -x "$MYSQLDUMP" ] || MYSQLDUMP="$(command -v mysqldump || echo /usr/bin/mysqldump)" 
+# Node: el del sistema o, si se instaló con nvm, el de ~/.nvm (cron no carga nvm)
 NODE="$(command -v node || true)"
 if [ -z "$NODE" ]; then NODE="$(ls -1d "$HOME"/.nvm/versions/node/*/bin/node 2>/dev/null | tail -n1)"; fi
 NODE="${NODE:-/usr/bin/node}"
