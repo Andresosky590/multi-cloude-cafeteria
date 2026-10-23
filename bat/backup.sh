@@ -18,8 +18,9 @@ DESTINO="$PROYECTO/Backup"
 LOG="$DESTINO/backup.log"
 DIAS_RETENCION="${DIAS_RETENCION:-7}"   # borra copias con más de 7 días
 FECHA="$(date +%Y-%m-%d_%H-%M)"
-MYSQLDUMP="/opt/lampp/bin/mysqldump"    # viene incluido con XAMPP (no se instala nada)
-# Node: el del sistema o, si se instaló con nvm, el de ~/.nvm (cron no carga nvm)
+# mysqldump: el de XAMPP si existe; si no, el del MySQL instalado en la VM (/usr/bin/mysqldump)
+MYSQLDUMP="/opt/lampp/bin/mysqldump"
+[ -x "$MYSQLDUMP" ] || MYSQLDUMP="$(command -v mysqldump || echo /usr/bin/mysqldump)"# Node: el del sistema o, si se instaló con nvm, el de ~/.nvm (cron no carga nvm)
 NODE="$(command -v node || true)"
 if [ -z "$NODE" ]; then NODE="$(ls -1d "$HOME"/.nvm/versions/node/*/bin/node 2>/dev/null | tail -n1)"; fi
 NODE="${NODE:-/usr/bin/node}"
@@ -49,8 +50,7 @@ if [ -x "$MYSQLDUMP" ]; then
   if MYSQL_PWD="$(leer_env DB_LOCAL_PASSWORD)" "$MYSQLDUMP" \
        --protocol=TCP -h "$(leer_env DB_LOCAL_HOST)" -P "$PUERTO_LOCAL" \
        -u "$(leer_env DB_LOCAL_USER)" \
-       --single-transaction --routines --triggers --databases "$(leer_env DB_LOCAL_NAME)" \
-       > "$ARCHIVO" 2>>"$LOG"; then
+       --single-transaction --no-tablespaces --routines --triggers --databases > "$ARCHIVO" 2>>"$LOG"; then
     log "OK xampp -> $ARCHIVO ($(du -h "$ARCHIVO" | cut -f1))"
   else
     rm -f "$ARCHIVO"; log "ERROR xampp (mysqldump)"; errores=$((errores+1))
