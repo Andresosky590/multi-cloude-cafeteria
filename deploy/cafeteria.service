@@ -8,7 +8,9 @@ Wants=network-online.target
 [Service]
 User=USUARIO
 WorkingDirectory=RUTA/backend
-ExecStart=/usr/bin/node server.js
+# NODE_DIR = carpeta de node (con nvm: /home/azureuser/.nvm/versions/node/vXX/bin)
+Environment=PATH=NODE_DIR:/usr/local/bin:/usr/bin:/bin
+ExecStart=/usr/bin/env node server.js
 Restart=always
 RestartSec=5
 Environment=NODE_ENV=production

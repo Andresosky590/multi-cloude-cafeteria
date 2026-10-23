@@ -19,7 +19,10 @@ LOG="$DESTINO/backup.log"
 DIAS_RETENCION="${DIAS_RETENCION:-7}"   # borra copias con más de 7 días
 FECHA="$(date +%Y-%m-%d_%H-%M)"
 MYSQLDUMP="/opt/lampp/bin/mysqldump"    # viene incluido con XAMPP (no se instala nada)
-NODE="$(command -v node || echo /usr/bin/node)"
+# Node: el del sistema o, si se instaló con nvm, el de ~/.nvm (cron no carga nvm)
+NODE="$(command -v node || true)"
+if [ -z "$NODE" ]; then NODE="$(ls -1d "$HOME"/.nvm/versions/node/*/bin/node 2>/dev/null | tail -n1)"; fi
+NODE="${NODE:-/usr/bin/node}"
 
 mkdir -p "$DESTINO/xampp" "$DESTINO/azure" "$DESTINO/supabase"
 log() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*" | tee -a "$LOG"; }
